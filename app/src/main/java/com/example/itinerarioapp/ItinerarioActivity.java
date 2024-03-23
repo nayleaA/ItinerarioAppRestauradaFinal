@@ -38,7 +38,6 @@ public class ItinerarioActivity extends AppCompatActivity {
         loadFragment(new ListItinerarioFragment());
 
 
-
         //cargar la fecha de busqueda
         busqueda= findViewById(R.id.buscar);
         busqueda.setOnClickListener(new View.OnClickListener() {
