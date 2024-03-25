@@ -2,6 +2,7 @@ package com.example.itinerarioapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.DatePickerDialog;
 import android.database.sqlite.SQLiteDatabase;
@@ -9,9 +10,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.itinerarioapp.Adaptadores.AdaptadorLista;
 import com.example.itinerarioapp.CALENDARIO.DatePickerFragment;
 import com.example.itinerarioapp.DB.dbHelper;
 import com.example.itinerarioapp.FRAGEMTS.ListItinerarioFragment;
@@ -23,19 +24,24 @@ public class ItinerarioActivity extends AppCompatActivity {
     FloatingActionButton fabAddReservation;
     ImageButton busqueda;
 
+    ListItinerarioFragment listafragmento;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_itinerario);
 
+       //enlazar fragmento
+        listafragmento= new ListItinerarioFragment();
+        //Cargar fragmento por default
+        getSupportFragmentManager().beginTransaction().add(R.id.ContenedorF,listafragmento).commit();
+
+
         //creando la BD
         dbHelper dbhelper = new dbHelper(ItinerarioActivity.this);
         SQLiteDatabase db = dbhelper.getWritableDatabase(); //escribir
         SQLiteDatabase dbr = dbhelper.getReadableDatabase(); //leer
-
-        // Cargar el fragmento en el contenedor
-        loadFragment(new ListItinerarioFragment());
 
 
         //cargar la fecha de busqueda
@@ -72,10 +78,6 @@ public class ItinerarioActivity extends AppCompatActivity {
 
             }
         });
-    }
-    // Método para cargar un fragmento en el contenedor
-    private void loadFragment(Fragment fragment) {
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
     }
 
     //metodo que rescata la fecha del calendario

@@ -1,68 +1,66 @@
 package com.example.itinerarioapp.FRAGEMTS;
 
-import android.database.sqlite.SQLiteDatabase;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.itinerarioapp.DB.dbHelper;
+import com.example.itinerarioapp.Adaptadores.AdaptadorLista;
+import com.example.itinerarioapp.Objetos.Tarjeta;
 import com.example.itinerarioapp.R;
 
-public class ListItinerarioFragment extends Fragment {
+import java.util.ArrayList;
+import java.util.List;
+
+public class ListItinerarioFragment extends Fragment  implements AdaptadorLista.OnTelefonoClickListener{
 
     RecyclerView recyclerView;
-    private SQLiteDatabase database;
+    AdaptadorLista adaptadorLista;
 
+    //constructor
     public ListItinerarioFragment() {
-
-        // Required empty public constructor
     }
 
+    //Crear el fragment
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
+    //crear el diseño del fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-       // return inflater.inflate(R.layout.fragment_list_itinerario, container, false);
-       // View view = inflater.inflate(R.layout.fragment_list_itinerario, container, false);
-        // Inicializar RecyclerView y dataList
-       // recyclerView = view.findViewById(R.id.recycler_view);
-
-        // Abrir la base de datos
-       // dbHelper dbHelper = new dbHelper(getActivity());
-       // database = dbHelper.getReadableDatabase();
-
-        // Cargar datos desde la base de datos SQLite
-        // loadDataFromDatabase();
-        return recyclerView;
+        View view = inflater.inflate(R.layout.fragment_list_itinerario, container, false);
+        recyclerView = view.findViewById(R.id.listarecycler);
+        cargarDatos(); // Llama a cargarDatos() aquí
+        return view;
     }
 
-    /* private void loadDataFromDatabase() {
-        Cursor cursor = database.rawQuery("SELECT * FROM tabla_datos", null);
+    private void cargarDatos() {
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        if (cursor.moveToFirst()) {
-            do {
-                // Obtener datos de cada fila y crear un objeto MyDataModel
-                int id = cursor.getInt(0);
-                String area = cursor.getString(1);
-                String fecha = cursor.getString(2);
-                String horaInicio = cursor.getString(3);
-                String horaFin = cursor.getString(4);
-                String telefono = cursor.getString(5);
-                String nombre = cursor.getString(6);
-                String actividad = cursor.getString(7);
+        List<Tarjeta> lista = new ArrayList<>();
 
-                // Crear un objeto  con los datos obtenidos
-
-                // Añadir el objeto a la lista de datos
-
-            } while (cursor.moveToNext());
+        for (int i = 0; i < 10; i++) {
+            lista.add(new Tarjeta(i, "Informatica", "hoy", "11:57", "12", "3421096968", "nay", "una"));
         }
-        // Cerrar el cursor
-        cursor.close();
-    }*/
+
+        adaptadorLista = new AdaptadorLista(lista, getContext(), (AdaptadorLista.OnTelefonoClickListener) this);
+        recyclerView.setAdapter(adaptadorLista);
+    }
+
+    @Override
+    public void onTelefonoClick(String telefono) {
+        // Abrir el marcador de teléfono
+        Intent intent = new Intent(Intent.ACTION_DIAL);
+        intent.setData(Uri.parse("tel:" + telefono));
+        startActivity(intent);
+    }
 }
