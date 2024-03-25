@@ -20,6 +20,7 @@ import com.example.itinerarioapp.Objetos.Tarjeta;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
+import java.util.Locale;
 
 /* Clase principal dela carga de elementos de la aplicacion,
 * carga la toolbar, el fragmento de la consulta general de los datos,
@@ -79,9 +80,13 @@ public class ItinerarioActivity extends AppCompatActivity {
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                 // +1 because January is zero
                 final String selectedDate = year + "-" + (month + 1) + "-" + day;
+
+                // Formatear la fecha seleccionada
+                String formattedDate = String.format(Locale.getDefault(), "%d-%02d-%02d", year, month + 1, day);
+
                 // Llama al método cargarDatosF en el fragmento
-                listafragmento.cargarDatosF(selectedDate);
-                Toast.makeText(ItinerarioActivity.this, "La fecha es "+selectedDate, Toast.LENGTH_SHORT).show();
+                listafragmento.cargarDatosF(formattedDate);
+                Toast.makeText(ItinerarioActivity.this, "La fecha es "+formattedDate, Toast.LENGTH_SHORT).show();
 
             }
         });
