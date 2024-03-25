@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -40,12 +41,12 @@ public class dbHelper extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
     }
 
+
     public void inserta(SQLiteDatabase db){
-        db.execSQL("INSERT INTO " + TABLE + "(id,area,fecha,horai,horaf, nombre,actividad, telefono) VALUES (1,'Informatica', '2023-01-01','10:00','10:00','Nay','desa','3421096968')");
+        db.execSQL("INSERT INTO " + TABLE + "(id, area, fecha, horai, horaf, nombre, actividad, telefono) VALUES (14, 'Informatica', '2024-02-14', '10:00', '10:00', 'Nay', 'desa', '3421096968')");
     }
 
     //consulta general
@@ -72,9 +73,13 @@ public class dbHelper extends SQLiteOpenHelper {
 
     //consulta por fecha
     public static List<Tarjeta> getAllTarjetasFecha(SQLiteDatabase dbr, String date) {
-
         List<Tarjeta> tarjetas = new ArrayList<>();
-        Cursor cursor = dbr.rawQuery("SELECT * FROM " + TABLE +" WHERE fecha='"+date+"'", null);
+       // Cursor cursor = dbr.rawQuery("SELECT * FROM " + TABLE +" WHERE fecha='"+date+"'", null);
+        Cursor cursor = dbr.rawQuery("SELECT * FROM " + TABLE +" WHERE fecha='" + String.format("%1$tY-%1$tm-%1$td", date) + "'", null);
+
+
+        // Log para verificar la consulta SQL
+        Log.d("Consulta SQL", "SELECT * FROM " + TABLE +" WHERE fecha='"+date+"'");
 
         while (cursor.moveToNext()) {
             c1 = cursor.getInt(0);
@@ -90,8 +95,13 @@ public class dbHelper extends SQLiteOpenHelper {
             tarjetas.add(tarjeta);
         }
         cursor.close();
+
+        // Log para verificar el tamaño de la lista de tarjetas
+        Log.d("Tamaño de la lista", String.valueOf(tarjetas.size()));
+
         return tarjetas;
     }
+
 
 
 }

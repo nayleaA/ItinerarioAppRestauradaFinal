@@ -31,6 +31,7 @@ public class ItinerarioActivity extends AppCompatActivity {
     FloatingActionButton fabAddReservation;
     ImageButton busqueda;
     ListItinerarioFragment listafragmento;
+    private dbHelper dbHelper; // Instancia de dbHelper
 
 
     @Override
@@ -38,7 +39,9 @@ public class ItinerarioActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_itinerario);
 
-       //enlazar fragmento
+        dbHelper = new dbHelper(this); // Inicializa dbHelper
+
+        //enlazar fragmento
         listafragmento= new ListItinerarioFragment();
         //Cargar fragmento por default
         getSupportFragmentManager().beginTransaction().add(R.id.ContenedorF,listafragmento).commit();
@@ -75,13 +78,9 @@ public class ItinerarioActivity extends AppCompatActivity {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                 // +1 because January is zero
-                final String selectedDate = year + "/" + (month + 1) + "/" + day;
-
-                dbHelper helper = new dbHelper(ItinerarioActivity.this);
-                SQLiteDatabase db = helper.getWritableDatabase();
-                // Realizar la consulta en la base de datos para obtener tarjetas por fecha
-                List<Tarjeta> tarjetas = dbHelper.getAllTarjetasFecha(db, selectedDate);
-
+                final String selectedDate = year + "-" + (month + 1) + "-" + day;
+                // Llama al método cargarDatosF en el fragmento
+                listafragmento.cargarDatosF(selectedDate);
                 Toast.makeText(ItinerarioActivity.this, "La fecha es "+selectedDate, Toast.LENGTH_SHORT).show();
 
             }

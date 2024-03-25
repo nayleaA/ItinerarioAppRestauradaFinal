@@ -162,4 +162,11 @@ public class AdaptadorLista extends RecyclerView.Adapter<AdaptadorLista.ViewHold
     public interface OnTelefonoClickListener {
         void onTelefonoClick(String telefono);
     }
+
+    // En el adaptador AdaptadorLista, agrega un método para actualizar los datos
+    public void actualizarDatos(List<Tarjeta> nuevaLista) {
+        tarjetaList.clear(); // Borra los datos existentes
+        tarjetaList.addAll(nuevaLista); // Agrega los nuevos datos
+        notifyDataSetChanged(); // Notifica al RecyclerView que los datos han cambiado
+    }
 }
