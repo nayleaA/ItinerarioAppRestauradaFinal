@@ -19,46 +19,69 @@ import com.example.itinerarioapp.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListItinerarioFragment extends Fragment  implements AdaptadorLista.OnTelefonoClickListener{
+/**
+ * Fragmento para mostrar una lista de itinerarios.
+ * Este fragmento se encarga de cargar y mostrar una lista de itinerarios utilizando un RecyclerView.
+ */
+public class ListItinerarioFragment extends Fragment implements AdaptadorLista.OnTelefonoClickListener {
 
-    RecyclerView recyclerView;
-    AdaptadorLista adaptadorLista;
+    private RecyclerView recyclerView; // RecyclerView para mostrar la lista de itinerarios
+    private AdaptadorLista adaptadorLista; // Adaptador para el RecyclerView
 
-    //constructor
+    /**
+     * Constructor de la clase.
+     */
     public ListItinerarioFragment() {
     }
 
-    //Crear el fragment
+    /**
+     * Método invocado al crear el fragmento.
+     * @param savedInstanceState Instancia guardada del estado anterior.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
-    //crear el diseño del fragment
+    /**
+     * Método invocado para crear la vista del fragmento.
+     * @param inflater Objeto para inflar la vista.
+     * @param container Contenedor de la vista.
+     * @param savedInstanceState Instancia guardada del estado anterior.
+     * @return Vista creada del fragmento.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_list_itinerario, container, false);
         recyclerView = view.findViewById(R.id.listarecycler);
-        cargarDatos(); // Llama a cargarDatos() aquí
+        cargarDatos(); // Cargar los datos de la lista
         return view;
     }
 
+    /**
+     * Método privado para cargar los datos de la lista de itinerarios.
+     */
     private void cargarDatos() {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
+        // Crear una lista de tarjetas con datos de ejemplo
         List<Tarjeta> lista = new ArrayList<>();
-
         for (int i = 0; i < 10; i++) {
             lista.add(new Tarjeta(i, "Informatica", "hoy", "11:57", "12", "3421096968", "nay", "una"));
         }
 
-        adaptadorLista = new AdaptadorLista(lista, getContext(), (AdaptadorLista.OnTelefonoClickListener) this);
+        // Inicializar el adaptador con la lista de tarjetas y el contexto actual
+        adaptadorLista = new AdaptadorLista(lista, getContext(), this);
         recyclerView.setAdapter(adaptadorLista);
     }
 
+    /**
+     * Método invocado cuando se hace clic en el botón del teléfono en una tarjeta.
+     * @param telefono Número de teléfono asociado al itinerario.
+     */
     @Override
     public void onTelefonoClick(String telefono) {
-        // Abrir el marcador de teléfono
+        // Abrir el marcador de teléfono con el número seleccionado
         Intent intent = new Intent(Intent.ACTION_DIAL);
         intent.setData(Uri.parse("tel:" + telefono));
         startActivity(intent);

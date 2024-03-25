@@ -19,32 +19,49 @@ import com.example.itinerarioapp.R;
 
 import java.util.List;
 
-public class AdaptadorLista extends RecyclerView.Adapter<AdaptadorLista.ViewHolder>{
+/**
+ * Adaptador para la lista de tarjetas.
+ * Este adaptador se encarga de manejar la presentación de las tarjetas en un RecyclerView.
+ */
+public class AdaptadorLista extends RecyclerView.Adapter<AdaptadorLista.ViewHolder> {
 
-    List<Tarjeta> tarjetaList;
-    Context context;
-    private OnTelefonoClickListener telefonoClickListener; // Referencia a la interfaz
+    private List<Tarjeta> tarjetaList; // Lista de tarjetas
+    private Context context; // Contexto de la aplicación
+    private OnTelefonoClickListener telefonoClickListener; // Interfaz para manejar el clic en el botón del teléfono
 
-
-    public AdaptadorLista(List<Tarjeta> tarjetaList, Context context,OnTelefonoClickListener telefonoClickListener) {
+    /**
+     * Constructor de la clase.
+     * @param tarjetaList Lista de tarjetas a mostrar.
+     * @param context Contexto de la aplicación.
+     * @param telefonoClickListener Interfaz para manejar el clic en el botón del teléfono.
+     */
+    public AdaptadorLista(List<Tarjeta> tarjetaList, Context context, OnTelefonoClickListener telefonoClickListener) {
         this.tarjetaList = tarjetaList;
         this.context = context;
         this.telefonoClickListener = telefonoClickListener;
     }
 
+    /**
+     * Método invocado cuando se necesita crear una nueva vista del elemento de la lista.
+     * @param parent Grupo al que pertenece la vista.
+     * @param viewType Tipo de la vista.
+     * @return ViewHolder con la vista del elemento de la lista.
+     */
     @NonNull
     @Override
-    //inflando el componente de la tarjeta
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.itemcardview,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.itemcardview, parent, false);
         return new ViewHolder(view);
     }
 
-    //Vinculacion de componentes
+    /**
+     * Método invocado para asociar datos a una vista.
+     * @param holder ViewHolder de la vista.
+     * @param position Posición del elemento en la lista.
+     */
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        // Obtener la tarjeta actual
-        Tarjeta tarjeta = tarjetaList.get(position);
+        Tarjeta tarjeta = tarjetaList.get(position); // Obtener la tarjeta actual
 
         // Asignar valores a los TextViews
         holder.area.setText(tarjeta.getArea());
@@ -58,15 +75,13 @@ public class AdaptadorLista extends RecyclerView.Adapter<AdaptadorLista.ViewHold
         // Asignar el ID de la tarjeta al campo correspondiente
         holder.itemView.setTag(tarjeta.getId());
 
-        // Obtener el teléfono para el botón
-        final String telefono = tarjeta.getTel();
-        final String idC= String.valueOf(tarjeta.getId());
+        final String telefono = tarjeta.getTel(); // Obtener el teléfono para el botón
+        final String idC = String.valueOf(tarjeta.getId());
 
         // Configurar OnClickListener para el botón del teléfono
         holder.imgtel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Toast.makeText(context, "Precionaste la tarjeta"+idC, Toast.LENGTH_SHORT).show();
                 telefonoClickListener.onTelefonoClick(telefono); // Llamar al método de la interfaz
             }
         });
@@ -88,7 +103,7 @@ public class AdaptadorLista extends RecyclerView.Adapter<AdaptadorLista.ViewHold
                         // Notificar al adaptador sobre el cambio
                         notifyDataSetChanged();
                         // Mostrar un mensaje indicando que la tarjeta fue borrada
-                        Toast.makeText(context, "Tarjeta "+idC+" borrada", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "Tarjeta " + idC + " borrada", Toast.LENGTH_SHORT).show();
                     }
                 });
                 builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
@@ -102,39 +117,48 @@ public class AdaptadorLista extends RecyclerView.Adapter<AdaptadorLista.ViewHold
                 return true;
             }
         });
-
     }
 
-
-
+    /**
+     * Método que devuelve el número total de elementos en el conjunto de datos.
+     * @return Número total de elementos.
+     */
     @Override
     public int getItemCount() {
         return tarjetaList.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder{
-        TextView id,area, Fecha, HoraI,HoraF,Tel,Nom, Act;
-        ImageView imgtel;
+    /**
+     * Clase ViewHolder que representa una vista del elemento de la lista.
+     */
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        TextView area, Fecha, HoraI, HoraF, Tel, Nom, Act; // Componentes de la tarjeta
+        ImageView imgtel; // Botón del teléfono
 
-        //enlazar componentes diseñados en layout-tarjeta
+        /**
+         * Constructor de la clase ViewHolder.
+         * @param itemView Vista del elemento de la lista.
+         */
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            area=itemView.findViewById(R.id.arear);
-            Fecha=itemView.findViewById(R.id.fechar);
-            HoraF=itemView.findViewById(R.id.horafr);
-            HoraI=itemView.findViewById(R.id.horair);
-            Tel=itemView.findViewById(R.id.telr);
-            Nom=itemView.findViewById(R.id.namer);
-            Act=itemView.findViewById(R.id.descact);
+            // Enlazar componentes diseñados en layout-tarjeta
+            area = itemView.findViewById(R.id.arear);
+            Fecha = itemView.findViewById(R.id.fechar);
+            HoraF = itemView.findViewById(R.id.horafr);
+            HoraI = itemView.findViewById(R.id.horair);
+            Tel = itemView.findViewById(R.id.telr);
+            Nom = itemView.findViewById(R.id.namer);
+            Act = itemView.findViewById(R.id.descact);
 
             // Enlazar ImageView
             imgtel = itemView.findViewById(R.id.imgtel);
-
         }
     }
 
-    // Definir la interfaz para manejar el clic en el botón del teléfono
+    /**
+     * Interfaz para manejar el clic en el botón del teléfono.
+     */
     public interface OnTelefonoClickListener {
         void onTelefonoClick(String telefono);
     }
