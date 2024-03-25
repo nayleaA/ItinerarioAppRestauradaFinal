@@ -19,8 +19,8 @@ public class dbHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NOMBRE="Itinerario.db";
     public static final String TABLE="Reservaciones";
 
-    int c1;
-    String c2,c3,c4,c5,c6,c7,c8,r;
+    static int c1;
+     static String c2,c3,c4,c5,c6,c7,c8;
 
     public dbHelper(@Nullable Context context) {
         super(context, DATABASE_NOMBRE, null, DATABASE_VERSION);
@@ -71,7 +71,7 @@ public class dbHelper extends SQLiteOpenHelper {
     }
 
     //consulta por fecha
-    public List<Tarjeta> getAllTarjetasFecha(SQLiteDatabase dbr,String date) {
+    public static List<Tarjeta> getAllTarjetasFecha(SQLiteDatabase dbr, String date) {
 
         List<Tarjeta> tarjetas = new ArrayList<>();
         Cursor cursor = dbr.rawQuery("SELECT * FROM " + TABLE +" WHERE fecha='"+date+"'", null);

@@ -16,7 +16,10 @@ import com.example.itinerarioapp.Adaptadores.AdaptadorLista;
 import com.example.itinerarioapp.CALENDARIO.DatePickerFragment;
 import com.example.itinerarioapp.DB.dbHelper;
 import com.example.itinerarioapp.FRAGEMTS.ListItinerarioFragment;
+import com.example.itinerarioapp.Objetos.Tarjeta;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.util.List;
 
 /* Clase principal dela carga de elementos de la aplicacion,
 * carga la toolbar, el fragmento de la consulta general de los datos,
@@ -73,6 +76,14 @@ public class ItinerarioActivity extends AppCompatActivity {
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                 // +1 because January is zero
                 final String selectedDate = year + "/" + (month + 1) + "/" + day;
+
+                dbHelper helper = new dbHelper(ItinerarioActivity.this);
+                SQLiteDatabase db = helper.getWritableDatabase();
+                // Realizar la consulta en la base de datos para obtener tarjetas por fecha
+                List<Tarjeta> tarjetas = dbHelper.getAllTarjetasFecha(db, selectedDate);
+
+                Toast.makeText(ItinerarioActivity.this, "La fecha es "+selectedDate, Toast.LENGTH_SHORT).show();
+
             }
         });
         newFragment.show(getSupportFragmentManager(), "datePicker");
