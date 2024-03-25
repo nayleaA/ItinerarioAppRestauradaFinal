@@ -1,6 +1,7 @@
 package com.example.itinerarioapp.FRAGEMTS;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -11,8 +12,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.itinerarioapp.Adaptadores.AdaptadorLista;
+import com.example.itinerarioapp.DB.dbHelper;
+import com.example.itinerarioapp.ItinerarioActivity;
 import com.example.itinerarioapp.Objetos.Tarjeta;
 import com.example.itinerarioapp.R;
 
@@ -27,6 +31,8 @@ public class ListItinerarioFragment extends Fragment implements AdaptadorLista.O
 
     private RecyclerView recyclerView; // RecyclerView para mostrar la lista de itinerarios
     private AdaptadorLista adaptadorLista; // Adaptador para el RecyclerView
+
+
 
     /**
      * Constructor de la clase.
@@ -64,16 +70,28 @@ public class ListItinerarioFragment extends Fragment implements AdaptadorLista.O
     private void cargarDatos() {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        // Crear una lista de tarjetas con datos de ejemplo
         List<Tarjeta> lista = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            lista.add(new Tarjeta(i, "Informatica", "hoy", "11:57", "12", "3421096968", "nay", "una"));
+
+        dbHelper helper = new dbHelper(getContext());
+        SQLiteDatabase db = helper.getWritableDatabase();
+        SQLiteDatabase dbr = helper.getReadableDatabase();
+
+        //validacion si existe BD inserta en Bd, esta es para el momento que se cree una nueva card
+        if (db != null) //si la bd se creo  manda a insertar
+        {
+            helper.inserta(db);
+            //Toast.makeText(.this, "Inserté datos", Toast.LENGTH_LONG);
+        }
+        else { //si no error
+            //Toast.makeText(ItinerarioActivity.this, "Error al insertar Base de datos", Toast.LENGTH_LONG).show();
         }
 
-        // Inicializar el adaptador con la lista de tarjetas y el contexto actual
+        lista = helper.getAllTarjetas(dbr);
+
         adaptadorLista = new AdaptadorLista(lista, getContext(), this);
         recyclerView.setAdapter(adaptadorLista);
     }
+
 
     /**
      * Método invocado cuando se hace clic en el botón del teléfono en una tarjeta.

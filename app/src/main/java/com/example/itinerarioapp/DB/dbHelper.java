@@ -7,6 +7,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
 
+import com.example.itinerarioapp.Objetos.Tarjeta;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 public class dbHelper extends SQLiteOpenHelper {
@@ -14,6 +18,9 @@ public class dbHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION=1;
     private static final String DATABASE_NOMBRE="Itinerario.db";
     public static final String TABLE="Reservaciones";
+
+    int c1;
+    String c2,c3,c4,c5,c6,c7,c8,r;
 
     public dbHelper(@Nullable Context context) {
         super(context, DATABASE_NOMBRE, null, DATABASE_VERSION);
@@ -42,47 +49,49 @@ public class dbHelper extends SQLiteOpenHelper {
     }
 
     //consulta general
-    public String consultar(SQLiteDatabase dbr) {
-        int c1;
-        String c2,c3,c4,c5,c6,c7,c8,r;
-        r="";
-        Vector<String> result = new Vector<String>();
-        Cursor cursor = dbr.rawQuery("SELECT * FROM " + TABLE + " ORDER BY nombre ", null);
+    public List<Tarjeta> getAllTarjetas(SQLiteDatabase dbr) {
+        List<Tarjeta> tarjetas = new ArrayList<>();
+        Cursor cursor = dbr.rawQuery("SELECT * FROM " + TABLE, null);
+
         while (cursor.moveToNext()) {
-            c1=cursor.getInt(0);
-            c2=cursor.getString(1);
-            c3=cursor.getString(2);
-            c4=cursor.getString(3);
-            c5=cursor.getString(4);
-            c6=cursor.getString(5);
-            c7=cursor.getString(6);
-            c8=cursor.getString(7);
-            r=r+c1+ " "+c2+ " " + c3 + " " + c4 + " " + c5+ " " + c6+ " " + c7 + " " + c8+  "\n";
+            c1 = cursor.getInt(0);
+            c2 = cursor.getString(1);
+            c3 = cursor.getString(2);
+            c4 = cursor.getString(3);
+            c5 = cursor.getString(4);
+            c6 = cursor.getString(5);
+            c7 = cursor.getString(6);
+            c8 = cursor.getString(7);
+
+            Tarjeta tarjeta = new Tarjeta(c1,c2,c3,c4,c5,c6, c7,c8);
+            tarjetas.add(tarjeta);
         }
         cursor.close();
-        return r;
+        return tarjetas;
     }
 
     //consulta por fecha
-   /* public String consultaF(SQLiteDatabase dbr) {
-        int c1;
-        String c2,c3,c4,c5,c6,c7,c8,r;
-        r="";
-        Vector<String> result = new Vector<String>();
-        Cursor cursor = dbr.rawQuery("SELECT * FROM " + TABLE + " WHERE fecha= '' ", null);
+    public List<Tarjeta> getAllTarjetasFecha(SQLiteDatabase dbr,String date) {
+
+        List<Tarjeta> tarjetas = new ArrayList<>();
+        Cursor cursor = dbr.rawQuery("SELECT * FROM " + TABLE +" WHERE fecha='"+date+"'", null);
+
         while (cursor.moveToNext()) {
-            c1=cursor.getInt(0);
-            c2=cursor.getString(1);
-            c3=cursor.getString(2);
-            c4=cursor.getString(3);
-            c5=cursor.getString(4);
-            c6=cursor.getString(5);
-            c7=cursor.getString(6);
-            c8=cursor.getString(7);
-            r=r+c1+ " "+c2+ " " + c3 + " " + c4 + " " + c5+ " " + c6+ " " + c7 + " " + c8+  "\n";
+            c1 = cursor.getInt(0);
+            c2 = cursor.getString(1);
+            c3 = cursor.getString(2);
+            c4 = cursor.getString(3);
+            c5 = cursor.getString(4);
+            c6 = cursor.getString(5);
+            c7 = cursor.getString(6);
+            c8 = cursor.getString(7);
+
+            Tarjeta tarjeta = new Tarjeta(c1,c2,c3,c4,c5,c6, c7,c8);
+            tarjetas.add(tarjeta);
         }
         cursor.close();
-        return r;
-    }*/
+        return tarjetas;
+    }
+
 
 }

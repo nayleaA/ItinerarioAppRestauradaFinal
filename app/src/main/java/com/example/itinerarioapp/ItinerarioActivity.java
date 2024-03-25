@@ -41,12 +41,6 @@ public class ItinerarioActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction().add(R.id.ContenedorF,listafragmento).commit();
 
 
-        //creando la BD, abriendo la conexion
-        dbHelper dbhelper = new dbHelper(ItinerarioActivity.this);
-        SQLiteDatabase db = dbhelper.getWritableDatabase(); //objeto para escribir en BD
-        SQLiteDatabase dbr = dbhelper.getReadableDatabase(); //objeto para leer en BD
-
-
         //cargar el dialogo de calendario para seleccionar la fecha de busqueda
         //enlazado
         busqueda= findViewById(R.id.buscar);
@@ -68,21 +62,6 @@ public class ItinerarioActivity extends AppCompatActivity {
             public void onClick(View view) {
                 // Aquí es donde manejarás el evento del botón flotante
                 Toast.makeText(ItinerarioActivity.this, "¡Has dado clic en el botón flotante!", Toast.LENGTH_SHORT).show();
-
-                //validacion si existe BD inserta en Bd, esta es para el momento que se cree una nueva card
-               /* if (db != null) //si la bd se creo  manda a insertar
-                {
-                    dbhelper.inserta(db);
-                    Toast.makeText(ItinerarioActivity.this, "Inserté datos", Toast.LENGTH_LONG);
-                }
-                else { //si no error
-                    Toast.makeText(ItinerarioActivity.this, "Error al insertar Base de datos", Toast.LENGTH_LONG).show();
-                }
-
-                 dbhelper.consultar(dbr);
-
-                Toast.makeText(ItinerarioActivity.this, "datos inserto"+dbr, Toast.LENGTH_SHORT).show();
-                */
             }
         });
     }
