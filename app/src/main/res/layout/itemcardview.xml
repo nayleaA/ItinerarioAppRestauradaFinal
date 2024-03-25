@@ -14,7 +14,7 @@
         android:gravity="start"
         android:background="@color/gray">
 
-        <!-- Primer LinearLayout con la información -->
+        <!-- Primer LinearLayout con la información de cabecera -->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -79,7 +79,7 @@
                 android:textColor="#000000"/>
         </LinearLayout>
 
-        <!-- Segundo LinearLayout con la información -->
+        <!-- Segundo LinearLayout con la información que se cargara a la tarjeta -->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -152,7 +152,7 @@
                 android:textColor="#000000"/>
         </LinearLayout>
 
-        <!-- ImageView del teléfono -->
+        <!-- ImageView del teléfono que activara el Dial -->
         <ImageView
             android:id="@+id/imgtel"
             android:layout_width="wrap_content"

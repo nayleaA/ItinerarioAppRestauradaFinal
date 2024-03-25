@@ -18,12 +18,15 @@ import com.example.itinerarioapp.DB.dbHelper;
 import com.example.itinerarioapp.FRAGEMTS.ListItinerarioFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+/* Clase principal dela carga de elementos de la aplicacion,
+* carga la toolbar, el fragmento de la consulta general de los datos,
+* y el boton flotante que permite asu vez cargar otro fragmento para añadir mas cardsview*/
+
 public class ItinerarioActivity extends AppCompatActivity {
 
-    //variables para el boton, y el icono buscar
+    //variables para el boton, y el icono buscar y el fragmento
     FloatingActionButton fabAddReservation;
     ImageButton busqueda;
-
     ListItinerarioFragment listafragmento;
 
 
@@ -38,14 +41,16 @@ public class ItinerarioActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction().add(R.id.ContenedorF,listafragmento).commit();
 
 
-        //creando la BD
+        //creando la BD, abriendo la conexion
         dbHelper dbhelper = new dbHelper(ItinerarioActivity.this);
-        SQLiteDatabase db = dbhelper.getWritableDatabase(); //escribir
-        SQLiteDatabase dbr = dbhelper.getReadableDatabase(); //leer
+        SQLiteDatabase db = dbhelper.getWritableDatabase(); //objeto para escribir en BD
+        SQLiteDatabase dbr = dbhelper.getReadableDatabase(); //objeto para leer en BD
 
 
-        //cargar la fecha de busqueda
+        //cargar el dialogo de calendario para seleccionar la fecha de busqueda
+        //enlazado
         busqueda= findViewById(R.id.buscar);
+        //Evento
         busqueda.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -55,6 +60,7 @@ public class ItinerarioActivity extends AppCompatActivity {
         });
 
         //agregar una nueva tarjeta
+        //enlazado
         fabAddReservation = findViewById(R.id.fab_add_reservation);
         // Agregar evento al botón flotante
         fabAddReservation.setOnClickListener(new View.OnClickListener() {
@@ -63,7 +69,8 @@ public class ItinerarioActivity extends AppCompatActivity {
                 // Aquí es donde manejarás el evento del botón flotante
                 Toast.makeText(ItinerarioActivity.this, "¡Has dado clic en el botón flotante!", Toast.LENGTH_SHORT).show();
 
-                if (db != null) //si la bd se creo  manda a insertar
+                //validacion si existe BD inserta en Bd, esta es para el momento que se cree una nueva card
+               /* if (db != null) //si la bd se creo  manda a insertar
                 {
                     dbhelper.inserta(db);
                     Toast.makeText(ItinerarioActivity.this, "Inserté datos", Toast.LENGTH_LONG);
@@ -75,12 +82,12 @@ public class ItinerarioActivity extends AppCompatActivity {
                  dbhelper.consultar(dbr);
 
                 Toast.makeText(ItinerarioActivity.this, "datos inserto"+dbr, Toast.LENGTH_SHORT).show();
-
+                */
             }
         });
     }
 
-    //metodo que rescata la fecha del calendario
+    //metodo que rescata la fecha seleccionada del calendario para poder consultarla
     public void abrircalendario() {
         DatePickerFragment newFragment = DatePickerFragment.newInstance(new DatePickerDialog.OnDateSetListener() {
             @Override

@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".FRAGEMTS.ListItinerarioFragment" >
 
+    <!-- Contenedor de la lista de Cards -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/listarecycler"
         android:layout_width="match_parent"
