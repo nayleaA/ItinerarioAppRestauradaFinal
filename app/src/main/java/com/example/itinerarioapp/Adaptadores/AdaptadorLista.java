@@ -2,13 +2,16 @@ package com.example.itinerarioapp.Adaptadores;
 
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.itinerarioapp.Objetos.Tarjeta;
@@ -40,26 +43,68 @@ public class AdaptadorLista extends RecyclerView.Adapter<AdaptadorLista.ViewHold
     //Vinculacion de componentes
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        // Obtener la tarjeta actual
+        Tarjeta tarjeta = tarjetaList.get(position);
+
         // Asignar valores a los TextViews
-        holder.area.setText(tarjetaList.get(position).getArea());
-        holder.Fecha.setText(tarjetaList.get(position).getFecha());
-        holder.HoraI.setText(tarjetaList.get(position).getHoraI());
-        holder.HoraF.setText(tarjetaList.get(position).getHoraF());
-        holder.Tel.setText(tarjetaList.get(position).getTel());
-        holder.Nom.setText(tarjetaList.get(position).getNom());
-        holder.Act.setText(tarjetaList.get(position).getAct());
+        holder.area.setText(tarjeta.getArea());
+        holder.Fecha.setText(tarjeta.getFecha());
+        holder.HoraI.setText(tarjeta.getHoraI());
+        holder.HoraF.setText(tarjeta.getHoraF());
+        holder.Tel.setText(tarjeta.getTel());
+        holder.Nom.setText(tarjeta.getNom());
+        holder.Act.setText(tarjeta.getAct());
+
+        // Asignar el ID de la tarjeta al campo correspondiente
+        holder.itemView.setTag(tarjeta.getId());
 
         // Obtener el teléfono para el botón
-        final String telefono = tarjetaList.get(position).getTel();
+        final String telefono = tarjeta.getTel();
+        final String idC= String.valueOf(tarjeta.getId());
 
         // Configurar OnClickListener para el botón del teléfono
         holder.imgtel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Toast.makeText(context, "Precionaste la tarjeta"+idC, Toast.LENGTH_SHORT).show();
                 telefonoClickListener.onTelefonoClick(telefono); // Llamar al método de la interfaz
             }
         });
+
+        // Configurar OnLongClickListener para la CardView
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                // Mostrar un diálogo de confirmación
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setTitle("Confirmación");
+                builder.setMessage("¿Deseas borrar esta tarjeta?");
+
+                builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Eliminar la tarjeta de la lista
+                        tarjetaList.remove(holder.getAdapterPosition());
+                        // Notificar al adaptador sobre el cambio
+                        notifyDataSetChanged();
+                        // Mostrar un mensaje indicando que la tarjeta fue borrada
+                        Toast.makeText(context, "Tarjeta "+idC+" borrada", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Cancelar el borrado de la tarjeta
+                        dialog.dismiss();
+                    }
+                });
+                builder.show();
+                return true;
+            }
+        });
+
     }
+
 
 
     @Override
